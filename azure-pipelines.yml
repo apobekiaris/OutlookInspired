@@ -1,0 +1,19 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'windows-2022'
+
+steps:
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      dotnet nuget add source '$(DXFeed)' --name DX
+      dotnet build --configuration Test
+    pwsh: true
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'test'
+    arguments: '--settings Tests\Tests.runsettings'
+  
